@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import API_URL from '../config/api';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -26,7 +25,7 @@ const Dashboard = () => {
       setLoading(true);
       
       // Fetch sales data
-      const salesResponse = await axios.get(`${API_URL}/api/sales`);
+      const salesResponse = await axios.get('http://localhost:5001/api/sales');
       const sales = salesResponse.data.sales;
 
       // Calculate stats

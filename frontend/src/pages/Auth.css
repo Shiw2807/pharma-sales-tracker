@@ -57,26 +57,3 @@
 .auth-footer a:hover {
   text-decoration: underline;
 }
-
-.demo-credentials {
-  margin-top: 30px;
-  padding: 20px;
-  background: #f8f9fa;
-  border-radius: 10px;
-  border-left: 4px solid #667eea;
-}
-
-.demo-credentials h4 {
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.demo-credentials p {
-  margin: 5px 0;
-  color: #666;
-  font-size: 14px;
-}
-
-.demo-credentials strong {
-  color: #333;
-}
