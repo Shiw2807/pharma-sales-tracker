@@ -3,6 +3,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { toast } from 'react-toastify';
+import API_URL from '../config/api';
 import './Reports.css';
 
 const COLORS = ['#667eea', '#764ba2', '#f093fb', '#fda085', '#84fab0', '#8fd3f4'];
@@ -27,19 +28,19 @@ const Reports = () => {
       setLoading(true);
       
       // Fetch summary report
-      const summaryResponse = await axios.get('http://localhost:5001/api/reports/summary', {
+      const summaryResponse = await axios.get(`${API_URL}/api/reports/summary`, {
         params: filters
       });
       setReportData(summaryResponse.data.report);
 
       // Fetch top customers
-      const customersResponse = await axios.get('http://localhost:5001/api/reports/top-customers', {
+      const customersResponse = await axios.get(`${API_URL}/api/reports/top-customers`, {
         params: { ...filters, limit: 5 }
       });
       setTopCustomers(customersResponse.data.topCustomers);
 
       // Fetch performance metrics
-      const performanceResponse = await axios.get('http://localhost:5001/api/reports/performance');
+      const performanceResponse = await axios.get(`${API_URL}/api/reports/performance`);
       setPerformance(performanceResponse.data.performance);
 
     } catch (error) {
@@ -59,7 +60,7 @@ const Reports = () => {
 
   const handleExport = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/reports/export', {
+      const response = await axios.get(`${API_URL}/api/reports/export`, {
         params: filters,
         responseType: 'blob'
       });

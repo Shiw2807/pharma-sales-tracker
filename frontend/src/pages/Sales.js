@@ -4,6 +4,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import SaleForm from '../components/SaleForm';
+import API_URL from '../config/api';
 import './Sales.css';
 
 const Sales = () => {
@@ -31,7 +32,7 @@ const Sales = () => {
   const fetchSales = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5001/api/sales');
+      const response = await axios.get(`${API_URL}/api/sales`);
       setSales(response.data.sales);
     } catch (error) {
       console.error('Error fetching sales:', error);
@@ -82,7 +83,7 @@ const Sales = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:5001/api/sales/${id}`);
+      await axios.delete(`${API_URL}/api/sales/${id}`);
       toast.success('Sale deleted successfully');
       fetchSales();
     } catch (error) {
