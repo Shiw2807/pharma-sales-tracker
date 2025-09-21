@@ -37,3 +37,6 @@ coverage/
 *.swp
 *.swo
 *~
+
+# Shell scripts (local helpers)
+*.sh
