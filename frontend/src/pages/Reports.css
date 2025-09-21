@@ -17,6 +17,16 @@
   margin-top: 30px;
 }
 
+/* Table responsive wrapper */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+  min-width: 500px;
+}
+
 .performance-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -62,11 +72,112 @@
     gap: 15px;
   }
 
+  .reports-header h1 {
+    font-size: 24px;
+  }
+
   .charts-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .charts-grid .card {
+    padding: 15px;
+    overflow: hidden;
+  }
+
+  .charts-grid h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
   }
 
   .performance-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Make Recharts responsive on mobile */
+  .recharts-responsive-container {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .recharts-wrapper {
+    width: 100% !important;
+  }
+
+  .recharts-surface {
+    width: 100% !important;
+  }
+
+  /* Adjust chart text for mobile */
+  .recharts-cartesian-axis-tick-value {
+    font-size: 11px;
+  }
+
+  .recharts-legend-item-text {
+    font-size: 12px;
+  }
+
+  /* Make tables scrollable */
+  .table-responsive {
+    margin: 0 -15px;
+    padding: 0 15px;
+    position: relative;
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #5585b5;
+    border-radius: 3px;
+  }
+
+  /* Adjust table font size on mobile */
+  .table-responsive table {
+    font-size: 14px;
+  }
+
+  .table-responsive th,
+  .table-responsive td {
+    padding: 8px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .charts-grid .card {
+    padding: 10px;
+  }
+
+  .performance-card {
+    padding: 15px;
+  }
+
+  .performance-card h3 {
+    font-size: 14px;
+  }
+
+  .performance-card p {
+    font-size: 16px;
+  }
+
+  /* Even smaller chart text on very small screens */
+  .recharts-cartesian-axis-tick-value {
+    font-size: 10px;
+  }
+
+  .recharts-legend-item-text {
+    font-size: 11px;
   }
 }

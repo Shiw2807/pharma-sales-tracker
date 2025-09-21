@@ -12,6 +12,11 @@
 
 .table-responsive {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+  min-width: 700px;
 }
 
 .text-small {
@@ -47,6 +52,10 @@
     gap: 15px;
   }
 
+  .sales-header h1 {
+    font-size: 24px;
+  }
+
   .filter-bar {
     flex-direction: column;
   }
@@ -54,5 +63,61 @@
   .filter-bar .form-control,
   .filter-bar .form-select {
     width: 100%;
+  }
+
+  /* Make table scrollable on mobile */
+  .table-responsive {
+    margin: 0 -15px;
+    padding: 0 15px;
+    position: relative;
+  }
+
+  .table-responsive::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #5585b5;
+    border-radius: 3px;
+  }
+
+  /* Adjust table for mobile */
+  .table-responsive table {
+    font-size: 14px;
+  }
+
+  .table-responsive th,
+  .table-responsive td {
+    padding: 8px;
+    white-space: nowrap;
+  }
+
+  .action-buttons {
+    gap: 5px;
+  }
+
+  .btn-action {
+    font-size: 16px;
+    padding: 3px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sales-header h1 {
+    font-size: 20px;
+  }
+
+  .table-responsive table {
+    font-size: 12px;
+  }
+
+  .table-responsive th,
+  .table-responsive td {
+    padding: 6px;
   }
 }

@@ -5,7 +5,7 @@ import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Cart
 import { toast } from 'react-toastify';
 import './Reports.css';
 
-const COLORS = ['#667eea', '#764ba2', '#f093fb', '#fda085', '#84fab0', '#8fd3f4'];
+const COLORS = ['#5585b5', '#53a8b6', '#79c2d0', '#bbe4e9', '#84fab0', '#8fd3f4'];
 
 const Reports = () => {
   const [reportData, setReportData] = useState(null);
@@ -173,8 +173,8 @@ const Reports = () => {
               <YAxis yAxisId="right" orientation="right" />
               <Tooltip />
               <Legend />
-              <Line yAxisId="left" type="monotone" dataKey="totalSales" stroke="#667eea" name="Sales Count" />
-              <Line yAxisId="right" type="monotone" dataKey="totalRevenue" stroke="#764ba2" name="Revenue ($)" />
+              <Line yAxisId="left" type="monotone" dataKey="totalSales" stroke="#5585b5" name="Sales Count" />
+              <Line yAxisId="right" type="monotone" dataKey="totalRevenue" stroke="#53a8b6" name="Revenue ($)" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -188,7 +188,7 @@ const Reports = () => {
               <XAxis dataKey="_id" angle={-45} textAnchor="end" height={100} />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="totalRevenue" fill="#667eea" name="Revenue ($)" />
+              <Bar dataKey="totalRevenue" fill="#5585b5" name="Revenue ($)" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -221,7 +221,8 @@ const Reports = () => {
         <div className="card">
           <h2>Top Customers</h2>
           {topCustomers.length > 0 ? (
-            <table className="table">
+            <div className="table-responsive">
+              <table className="table">
               <thead>
                 <tr>
                   <th>Customer</th>
@@ -244,6 +245,7 @@ const Reports = () => {
                 ))}
               </tbody>
             </table>
+            </div>
           ) : (
             <p>No customer data available</p>
           )}

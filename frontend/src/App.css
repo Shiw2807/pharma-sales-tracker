@@ -1,6 +1,6 @@
 .App {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #5585b5 0%, #53a8b6 100%);
 }
 
 .container {
@@ -29,13 +29,36 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #5585b5 0%, #53a8b6 100%);
   color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #53a8b6 0%, #79c2d0 100%);
+  transition: left 0.4s ease;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 15px rgba(85, 133, 181, 0.4);
+}
+
+.btn-primary:hover::before {
+  left: 0;
+}
+
+.btn-primary span {
+  position: relative;
+  z-index: 1;
 }
 
 .btn-secondary {
@@ -75,8 +98,8 @@
 
 .form-control:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #5585b5;
+  box-shadow: 0 0 0 3px rgba(85, 133, 181, 0.1);
 }
 
 .form-select {

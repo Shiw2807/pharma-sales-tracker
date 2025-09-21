@@ -49,11 +49,13 @@
 }
 
 .auth-footer a {
-  color: #667eea;
+  color: #5585b5;
   text-decoration: none;
   font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .auth-footer a:hover {
+  color: #53a8b6;
   text-decoration: underline;
 }

@@ -121,7 +121,7 @@ const Dashboard = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="sales" stroke="#667eea" name="Sales Count" />
+              <Line type="monotone" dataKey="sales" stroke="#5585b5" name="Sales Count" />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -135,7 +135,7 @@ const Dashboard = () => {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="revenue" fill="#764ba2" name="Revenue ($)" />
+              <Bar dataKey="revenue" fill="#53a8b6" name="Revenue ($)" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -144,7 +144,8 @@ const Dashboard = () => {
       <div className="card">
         <h2>Recent Sales</h2>
         {stats.recentSales.length > 0 ? (
-          <table className="table">
+          <div className="table-responsive">
+            <table className="table">
             <thead>
               <tr>
                 <th>Date</th>
@@ -172,6 +173,7 @@ const Dashboard = () => {
               ))}
             </tbody>
           </table>
+          </div>
         ) : (
           <div className="empty-state">
             <h3>No sales yet</h3>
