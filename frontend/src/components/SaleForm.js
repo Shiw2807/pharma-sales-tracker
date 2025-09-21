@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useAuth } from '../context/AuthContext';
-import API_URL from '../config/api';
-import './SaleForm.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
+import API_URL from "../config/api";
+import "./SaleForm.css";
 
 const SaleForm = ({ sale, onClose, onSuccess }) => {
   const { user } = useAuth();
   const [formData, setFormData] = useState({
-    productName: '',
+    productName: "",
     quantity: 1,
     price: 0,
-    dateOfSale: new Date().toISOString().split('T')[0],
+    dateOfSale: new Date().toISOString().split("T")[0],
     customerInfo: {
-      name: '',
-      email: '',
-      phone: '',
-      address: ''
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
     },
-    status: 'completed',
-    notes: '',
-    salesRepresentative: ''
+    status: "completed",
+    notes: "",
+    salesRepresentative: "",
   });
   const [loading, setLoading] = useState(false);
   const [salesReps, setSalesReps] = useState([]);
@@ -31,16 +31,16 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
         productName: sale.productName,
         quantity: sale.quantity,
         price: sale.price,
-        dateOfSale: new Date(sale.dateOfSale).toISOString().split('T')[0],
+        dateOfSale: new Date(sale.dateOfSale).toISOString().split("T")[0],
         customerInfo: sale.customerInfo,
         status: sale.status,
-        notes: sale.notes || '',
-        salesRepresentative: sale.salesRepresentative?._id || sale.salesRepresentative || ''
+        notes: sale.notes || "",
+        salesRepresentative:
+          sale.salesRepresentative?._id || sale.salesRepresentative || "",
       });
     }
-    
-    // Fetch sales representatives if user is a manager
-    if (user?.role === 'manager') {
+
+    if (user?.role === "manager") {
       fetchSalesReps();
     }
   }, [sale, user]);
@@ -50,26 +50,26 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
       const response = await axios.get(`${API_URL}/api/sales/representatives`);
       setSalesReps(response.data.salesReps);
     } catch (error) {
-      console.error('Error fetching sales representatives:', error);
+      console.error("Error fetching sales representatives:", error);
     }
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    if (name.startsWith('customer.')) {
-      const field = name.split('.')[1];
+
+    if (name.startsWith("customer.")) {
+      const field = name.split(".")[1];
       setFormData({
         ...formData,
         customerInfo: {
           ...formData.customerInfo,
-          [field]: value
-        }
+          [field]: value,
+        },
       });
     } else {
       setFormData({
         ...formData,
-        [name]: value
+        [name]: value,
       });
     }
   };
@@ -80,18 +80,16 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
 
     try {
       if (sale) {
-        // Update existing sale
         await axios.put(`${API_URL}/api/sales/${sale._id}`, formData);
-        toast.success('Sale updated successfully');
+        toast.success("Sale updated successfully");
       } else {
-        // Create new sale
         await axios.post(`${API_URL}/api/sales`, formData);
-        toast.success('Sale created successfully');
+        toast.success("Sale created successfully");
       }
       onSuccess();
     } catch (error) {
-      console.error('Error saving sale:', error);
-      const message = error.response?.data?.message || 'Failed to save sale';
+      console.error("Error saving sale:", error);
+      const message = error.response?.data?.message || "Failed to save sale";
       toast.error(message);
     } finally {
       setLoading(false);
@@ -102,12 +100,14 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2 className="modal-title">{sale ? 'Edit Sale' : 'Add New Sale'}</h2>
-          <button className="modal-close" onClick={onClose}>×</button>
+          <h2 className="modal-title">{sale ? "Edit Sale" : "Add New Sale"}</h2>
+          <button className="modal-close" onClick={onClose}>
+            ×
+          </button>
         </div>
 
         <form onSubmit={handleSubmit}>
-          {user?.role === 'manager' && !sale && (
+          {user?.role === "manager" && !sale && (
             <div className="form-group">
               <label className="form-label">Sales Representative *</label>
               <select
@@ -118,7 +118,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
                 required
               >
                 <option value="">Select a sales representative</option>
-                {salesReps.map(rep => (
+                {salesReps.map((rep) => (
                   <option key={rep._id} value={rep._id}>
                     {rep.name} ({rep.email})
                   </option>
@@ -127,7 +127,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
             </div>
           )}
 
-          {user?.role === 'manager' && sale && (
+          {user?.role === "manager" && sale && (
             <div className="form-group">
               <label className="form-label">Sales Representative</label>
               <select
@@ -136,7 +136,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
                 value={formData.salesRepresentative}
                 onChange={handleChange}
               >
-                {salesReps.map(rep => (
+                {salesReps.map((rep) => (
                   <option key={rep._id} value={rep._id}>
                     {rep.name} ({rep.email})
                   </option>
@@ -215,7 +215,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
           </div>
 
           <h3>Customer Information</h3>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">Customer Name *</label>
@@ -278,7 +278,9 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
           </div>
 
           <div className="form-total">
-            <strong>Total Amount: ${(formData.quantity * formData.price).toFixed(2)}</strong>
+            <strong>
+              Total Amount: ${(formData.quantity * formData.price).toFixed(2)}
+            </strong>
           </div>
 
           <div className="modal-footer">
@@ -294,7 +296,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
               className="btn btn-primary"
               disabled={loading}
             >
-              {loading ? 'Saving...' : (sale ? 'Update Sale' : 'Create Sale')}
+              {loading ? "Saving..." : sale ? "Update Sale" : "Create Sale"}
             </button>
           </div>
         </form>

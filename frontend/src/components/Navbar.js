@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import './Navbar.css';
+import React, { useState, useRef, useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./Navbar.css";
 
 const Navbar = () => {
   const { isAuthenticated, user, logout, isManager } = useAuth();
@@ -11,10 +11,9 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate("/login");
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -22,8 +21,8 @@ const Navbar = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   if (!isAuthenticated) {
@@ -37,24 +36,30 @@ const Navbar = () => {
           <span className="brand-icon">💊</span>
           <span className="brand-text">Pharma Sales Tracker</span>
         </Link>
-        
+
         <div className="navbar-menu">
-          <NavLink 
-            to="/dashboard" 
-            className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) =>
+              `navbar-link ${isActive ? "active" : ""}`
+            }
           >
             Dashboard
           </NavLink>
-          <NavLink 
-            to="/sales" 
-            className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}
+          <NavLink
+            to="/sales"
+            className={({ isActive }) =>
+              `navbar-link ${isActive ? "active" : ""}`
+            }
           >
             Sales
           </NavLink>
           {isManager && (
-            <NavLink 
-              to="/reports" 
-              className={({ isActive }) => `navbar-link ${isActive ? 'active' : ''}`}
+            <NavLink
+              to="/reports"
+              className={({ isActive }) =>
+                `navbar-link ${isActive ? "active" : ""}`
+              }
             >
               Reports
             </NavLink>
@@ -63,15 +68,17 @@ const Navbar = () => {
 
         <div className="navbar-user">
           <span className="user-info-desktop">
-            👤 {user?.name} ({user?.role?.replace('_', ' ')})
+            👤 {user?.name} ({user?.role?.replace("_", " ")})
           </span>
           <button onClick={handleLogout} className="btn-logout desktop-only">
             Logout
           </button>
-          
-          {/* Mobile user dropdown */}
-          <div className="user-dropdown-container mobile-only" ref={dropdownRef}>
-            <button 
+
+          <div
+            className="user-dropdown-container mobile-only"
+            ref={dropdownRef}
+          >
+            <button
               className="user-dropdown-trigger"
               onClick={() => setShowDropdown(!showDropdown)}
               aria-label="User menu"
@@ -82,7 +89,7 @@ const Navbar = () => {
               <div className="user-dropdown-menu">
                 <div className="dropdown-user-info">
                   <strong>{user?.name}</strong>
-                  <small>{user?.role?.replace('_', ' ')}</small>
+                  <small>{user?.role?.replace("_", " ")}</small>
                 </div>
                 <button onClick={handleLogout} className="dropdown-logout-btn">
                   Logout

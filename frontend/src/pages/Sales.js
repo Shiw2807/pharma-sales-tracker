@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
-import { format } from 'date-fns';
-import { toast } from 'react-toastify';
-import SaleForm from '../components/SaleForm';
-import './Sales.css';
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { format } from "date-fns";
+import { toast } from "react-toastify";
+import SaleForm from "../components/SaleForm";
+import "./Sales.css";
 
 const Sales = () => {
   const { user, isManager } = useAuth();
@@ -14,10 +14,10 @@ const Sales = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingSale, setEditingSale] = useState(null);
   const [filters, setFilters] = useState({
-    productName: '',
-    startDate: '',
-    endDate: '',
-    status: ''
+    productName: "",
+    startDate: "",
+    endDate: "",
+    status: "",
   });
 
   useEffect(() => {
@@ -31,11 +31,11 @@ const Sales = () => {
   const fetchSales = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5001/api/sales');
+      const response = await axios.get("http://localhost:5001/api/sales");
       setSales(response.data.sales);
     } catch (error) {
-      console.error('Error fetching sales:', error);
-      toast.error('Failed to fetch sales');
+      console.error("Error fetching sales:", error);
+      toast.error("Failed to fetch sales");
     } finally {
       setLoading(false);
     }
@@ -45,24 +45,26 @@ const Sales = () => {
     let filtered = [...sales];
 
     if (filters.productName) {
-      filtered = filtered.filter(sale => 
-        sale.productName.toLowerCase().includes(filters.productName.toLowerCase())
+      filtered = filtered.filter((sale) =>
+        sale.productName
+          .toLowerCase()
+          .includes(filters.productName.toLowerCase())
       );
     }
 
     if (filters.status) {
-      filtered = filtered.filter(sale => sale.status === filters.status);
+      filtered = filtered.filter((sale) => sale.status === filters.status);
     }
 
     if (filters.startDate) {
-      filtered = filtered.filter(sale => 
-        new Date(sale.dateOfSale) >= new Date(filters.startDate)
+      filtered = filtered.filter(
+        (sale) => new Date(sale.dateOfSale) >= new Date(filters.startDate)
       );
     }
 
     if (filters.endDate) {
-      filtered = filtered.filter(sale => 
-        new Date(sale.dateOfSale) <= new Date(filters.endDate)
+      filtered = filtered.filter(
+        (sale) => new Date(sale.dateOfSale) <= new Date(filters.endDate)
       );
     }
 
@@ -72,22 +74,22 @@ const Sales = () => {
   const handleFilterChange = (e) => {
     setFilters({
       ...filters,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this sale?')) {
+    if (!window.confirm("Are you sure you want to delete this sale?")) {
       return;
     }
 
     try {
       await axios.delete(`http://localhost:5001/api/sales/${id}`);
-      toast.success('Sale deleted successfully');
+      toast.success("Sale deleted successfully");
       fetchSales();
     } catch (error) {
-      console.error('Error deleting sale:', error);
-      toast.error('Failed to delete sale');
+      console.error("Error deleting sale:", error);
+      toast.error("Failed to delete sale");
     }
   };
 
@@ -118,10 +120,7 @@ const Sales = () => {
     <div className="container">
       <div className="sales-header">
         <h1>Sales Management</h1>
-        <button 
-          className="btn btn-primary"
-          onClick={() => setShowForm(true)}
-        >
+        <button className="btn btn-primary" onClick={() => setShowForm(true)}>
           + Add New Sale
         </button>
       </div>
@@ -180,23 +179,27 @@ const Sales = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredSales.map(sale => (
+                {filteredSales.map((sale) => (
                   <tr key={sale._id}>
-                    <td>{format(new Date(sale.dateOfSale), 'MMM dd, yyyy')}</td>
+                    <td>{format(new Date(sale.dateOfSale), "MMM dd, yyyy")}</td>
                     <td>{sale.productName}</td>
                     <td>
                       <div>
                         <strong>{sale.customerInfo.name}</strong>
                         {sale.customerInfo.email && (
-                          <div className="text-small">{sale.customerInfo.email}</div>
+                          <div className="text-small">
+                            {sale.customerInfo.email}
+                          </div>
                         )}
                       </div>
                     </td>
                     <td>{sale.quantity}</td>
                     <td>${sale.price.toFixed(2)}</td>
-                    <td><strong>${sale.totalAmount.toFixed(2)}</strong></td>
+                    <td>
+                      <strong>${sale.totalAmount.toFixed(2)}</strong>
+                    </td>
                     {isManager && (
-                      <td>{sale.salesRepresentative?.name || 'N/A'}</td>
+                      <td>{sale.salesRepresentative?.name || "N/A"}</td>
                     )}
                     <td>
                       <span className={`status-badge status-${sale.status}`}>
@@ -246,5 +249,4 @@ const Sales = () => {
     </div>
   );
 };
-
 export default Sales;

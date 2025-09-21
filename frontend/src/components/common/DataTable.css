@@ -1,0 +1,38 @@
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.data-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-striped tbody tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+.table-hover tbody tr:hover {
+  background: #e9ecef;
+  transition: background 0.2s ease;
+}
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background: #e3f2fd !important;
+}

@@ -26,19 +26,16 @@ const Reports = () => {
     try {
       setLoading(true);
       
-      // Fetch summary report
       const summaryResponse = await axios.get('http://localhost:5001/api/reports/summary', {
         params: filters
       });
       setReportData(summaryResponse.data.report);
 
-      // Fetch top customers
       const customersResponse = await axios.get('http://localhost:5001/api/reports/top-customers', {
         params: { ...filters, limit: 5 }
       });
       setTopCustomers(customersResponse.data.topCustomers);
 
-      // Fetch performance metrics
       const performanceResponse = await axios.get('http://localhost:5001/api/reports/performance');
       setPerformance(performanceResponse.data.performance);
 
