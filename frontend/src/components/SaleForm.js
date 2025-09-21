@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
+import API_URL from '../config/api';
 import './SaleForm.css';
 
 const SaleForm = ({ sale, onClose, onSuccess }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     productName: '',
     quantity: 1,
@@ -46,7 +47,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
 
   const fetchSalesReps = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/api/sales/representatives');
+      const response = await axios.get(`${API_URL}/api/sales/representatives`);
       setSalesReps(response.data.salesReps);
     } catch (error) {
       console.error('Error fetching sales representatives:', error);
@@ -80,11 +81,11 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
     try {
       if (sale) {
         // Update existing sale
-        await axios.put(`http://localhost:5001/api/sales/${sale._id}`, formData);
+        await axios.put(`${API_URL}/api/sales/${sale._id}`, formData);
         toast.success('Sale updated successfully');
       } else {
         // Create new sale
-        await axios.post('http://localhost:5001/api/sales', formData);
+        await axios.post(`${API_URL}/api/sales`, formData);
         toast.success('Sale created successfully');
       }
       onSuccess();
