@@ -1,6 +1,6 @@
 # Pharmaceutical Sales Tracking System
 
-A comprehensive web application for tracking pharmaceutical sales data with user management, built using the MERN stack (MongoDB, Express, React, Node.js).
+Please use the feature branch only. A comprehensive web application for tracking pharmaceutical sales data with user management, built using the MERN stack (MongoDB, Express, React, Node.js).
 
 ## Features
 
