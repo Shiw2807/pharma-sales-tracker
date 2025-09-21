@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sales Functionality</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .sales-list {
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 Pharmaceutical Sales Tracker - Test Page</h1>
+        
+        <div id="message"></div>
+
+        <h2>Step 1: Login</h2>
+        <div class="two-column">
+            <div>
+                <button onclick="loginAsManager()">Login as Manager</button>
+                <button onclick="loginAsSalesRep()">Login as Sales Rep</button>
+            </div>
+            <div>
+                <p>Current User: <strong id="currentUser">Not logged in</strong></p>
+            </div>
+        </div>
+
+        <h2>Step 2: Add New Sale</h2>
+        <form id="saleForm">
+            <div class="two-column">
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="productName" value="Paracetamol 500mg" required>
+                </div>
+                <div class="form-group">
+                    <label>Date of Sale *</label>
+                    <input type="date" id="dateOfSale" value="2024-01-15" required>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="form-group">
+                    <label>Quantity *</label>
+                    <input type="number" id="quantity" value="100" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Price per Unit *</label>
+                    <input type="number" id="price" value="5.99" step="0.01" min="0" required>
+                </div>
+            </div>
+
+            <h3>Customer Information</h3>
+            <div class="two-column">
+                <div class="form-group">
+                    <label>Customer Name *</label>
+                    <input type="text" id="customerName" value="City Pharmacy" required>
+                </div>
+                <div class="form-group">
+                    <label>Customer Email</label>
+                    <input type="email" id="customerEmail" value="contact@citypharmacy.com">
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="form-group">
+                    <label>Customer Phone</label>
+                    <input type="tel" id="customerPhone" value="+1234567890">
+                </div>
+                <div class="form-group">
+                    <label>Customer Address</label>
+                    <input type="text" id="customerAddress" value="123 Main St, City">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select id="status">
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea id="notes" rows="3">Bulk order with 10% discount applied</textarea>
+            </div>
+
+            <button type="submit">Add Sale</button>
+            <button type="button" onclick="fetchSales()">Refresh Sales List</button>
+        </form>
+
+        <div class="sales-list">
+            <h2>Sales List</h2>
+            <div id="salesTable"></div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = '';
+        let currentUserData = null;
+
+        // Login as Manager
+        async function loginAsManager() {
+            try {
+                const response = await fetch('http://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'manager@demo.com',
+                        password: 'password123'
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    authToken = data.token;
+                    currentUserData = data.user;
+                    showMessage('Logged in as Manager successfully!', 'success');
+                    document.getElementById('currentUser').textContent = `${data.user.name} (${data.user.role})`;
+                    fetchSales();
+                } else {
+                    showMessage('Login failed: ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Login error: ' + error.message, 'error');
+            }
+        }
+
+        // Login as Sales Representative
+        async function loginAsSalesRep() {
+            try {
+                const response = await fetch('http://localhost:5001/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'sales@demo.com',
+                        password: 'password123'
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    authToken = data.token;
+                    currentUserData = data.user;
+                    showMessage('Logged in as Sales Representative successfully!', 'success');
+                    document.getElementById('currentUser').textContent = `${data.user.name} (${data.user.role})`;
+                    fetchSales();
+                } else {
+                    showMessage('Login failed: ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Login error: ' + error.message, 'error');
+            }
+        }
+
+        // Add new sale
+        document.getElementById('saleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!authToken) {
+                showMessage('Please login first!', 'error');
+                return;
+            }
+
+            const saleData = {
+                productName: document.getElementById('productName').value,
+                quantity: parseInt(document.getElementById('quantity').value),
+                price: parseFloat(document.getElementById('price').value),
+                dateOfSale: document.getElementById('dateOfSale').value,
+                customerInfo: {
+                    name: document.getElementById('customerName').value,
+                    email: document.getElementById('customerEmail').value,
+                    phone: document.getElementById('customerPhone').value,
+                    address: document.getElementById('customerAddress').value
+                },
+                status: document.getElementById('status').value,
+                notes: document.getElementById('notes').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:5001/api/sales', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(saleData)
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showMessage('Sale added successfully! Total Amount: $' + (saleData.quantity * saleData.price).toFixed(2), 'success');
+                    fetchSales();
+                } else {
+                    showMessage('Error adding sale: ' + (data.message || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        });
+
+        // Fetch and display sales
+        async function fetchSales() {
+            if (!authToken) {
+                showMessage('Please login first to view sales!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5001/api/sales', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    displaySales(data.sales);
+                } else {
+                    showMessage('Error fetching sales', 'error');
+                }
+            } catch (error) {
+                showMessage('Error: ' + error.message, 'error');
+            }
+        }
+
+        // Display sales in table
+        function displaySales(sales) {
+            if (sales.length === 0) {
+                document.getElementById('salesTable').innerHTML = '<p>No sales found. Add your first sale!</p>';
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Customer</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            ${currentUserData?.role === 'manager' ? '<th>Sales Rep</th>' : ''}
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            sales.forEach(sale => {
+                const date = new Date(sale.dateOfSale).toLocaleDateString();
+                html += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>${sale.productName}</td>
+                        <td>${sale.customerInfo.name}</td>
+                        <td>${sale.quantity}</td>
+                        <td>$${sale.price.toFixed(2)}</td>
+                        <td><strong>$${sale.totalAmount.toFixed(2)}</strong></td>
+                        <td>${sale.status}</td>
+                        ${currentUserData?.role === 'manager' ? `<td>${sale.salesRepresentative?.name || 'N/A'}</td>` : ''}
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('salesTable').innerHTML = html;
+        }
+
+        // Show message
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = type;
+            messageDiv.textContent = message;
+            setTimeout(() => {
+                messageDiv.textContent = '';
+                messageDiv.className = '';
+            }, 5000);
+        }
+
+        // Set today's date as default
+        document.getElementById('dateOfSale').valueAsDate = new Date();
+    </script>
+</body>
+</html>
