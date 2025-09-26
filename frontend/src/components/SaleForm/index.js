@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext";
-import API_URL from "../config/api";
+import { useAuth } from "../../context/AuthContext";
+import API_URL from "../../config/api";
 import "./SaleForm.css";
 
 const SaleForm = ({ sale, onClose, onSuccess }) => {
