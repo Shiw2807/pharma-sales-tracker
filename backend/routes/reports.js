@@ -136,6 +136,7 @@ router.get('/summary', authenticate, isManager, async (req, res) => {
 router.get('/top-customers', authenticate, isManager, async (req, res) => {
   try {
     const { startDate, endDate, limit = 10 } = req.query;
+    console.log('hi')
 
     let matchQuery = {};
     if (startDate || endDate) {
