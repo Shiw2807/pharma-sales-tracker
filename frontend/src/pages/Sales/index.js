@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import axios from "axios";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
-import SaleForm from "../components/SaleForm";
+import SaleForm from "../../components/SaleForm";
 import "./Sales.css";
 
 const Sales = () => {
