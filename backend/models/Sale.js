@@ -50,6 +50,12 @@ const SaleSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  region: {
+    type: String,
+    enum: ['North', 'South', 'East', 'West', 'Central'],
+    required: [true, 'Please provide sales region'],
+    default: 'Central'
+  },
   status: {
     type: String,
     enum: ['pending', 'completed', 'cancelled'],

@@ -75,6 +75,7 @@ async function seedDatabase() {
     // Create sales data
     const sales = [];
     const salesReps = [salesRep1, salesRep2];
+    const regions = ['North', 'South', 'East', 'West', 'Central'];
 
     // Generate sales for the last 60 days
     for (let i = 0; i < 100; i++) {
@@ -87,6 +88,7 @@ async function seedDatabase() {
       const quantity = Math.floor(Math.random() * 50) + 1;
       const price = (Math.random() * 100 + 10).toFixed(2);
       const rep = salesReps[Math.floor(Math.random() * salesReps.length)];
+      const region = regions[Math.floor(Math.random() * regions.length)];
 
       sales.push({
         productName: product,
@@ -101,6 +103,7 @@ async function seedDatabase() {
           address: `${Math.floor(Math.random() * 999) + 1} Main Street, City`
         },
         salesRepresentative: rep._id,
+        region: region,
         status: Math.random() > 0.1 ? 'completed' : (Math.random() > 0.5 ? 'pending' : 'cancelled'),
         notes: Math.random() > 0.7 ? 'Bulk order with discount applied' : ''
       });
