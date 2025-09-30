@@ -1,0 +1,222 @@
+.monthly-trend-chart {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.chart-header {
+  margin-bottom: 20px;
+}
+
+.chart-header h2 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.chart-subtitle {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.chart-controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+}
+
+.control-group label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.control-group .form-select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.control-group .form-select:hover {
+  border-color: #5585b5;
+}
+
+.control-group .form-select:focus {
+  outline: none;
+  border-color: #5585b5;
+  box-shadow: 0 0 0 2px rgba(85, 133, 181, 0.1);
+}
+
+.date-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.date-filters .form-control {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  max-width: 200px;
+}
+
+.date-filters .form-control:focus {
+  outline: none;
+  border-color: #5585b5;
+  box-shadow: 0 0 0 2px rgba(85, 133, 181, 0.1);
+}
+
+.chart-container {
+  margin: 20px 0;
+  padding: 20px 0;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  background: #fafafa;
+}
+
+.empty-chart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: #999;
+  font-size: 1.1rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #d32f2f;
+  font-size: 1.1rem;
+}
+
+.summary-stats {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.summary-stats h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.stat-item {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border-left: 3px solid #5585b5;
+}
+
+.stat-product {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.stat-region {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.stat-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.stat-values span {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chart-controls {
+    flex-direction: column;
+  }
+  
+  .control-group {
+    width: 100%;
+  }
+  
+  .date-filters {
+    flex-direction: column;
+  }
+  
+  .date-filters .form-control {
+    max-width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Chart customization */
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  background: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  padding: 8px 12px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.recharts-tooltip-label {
+  color: #333 !important;
+  font-weight: 600 !important;
+  margin-bottom: 4px !important;
+}
+
+.recharts-tooltip-item {
+  color: #666 !important;
+  font-size: 0.9rem !important;
+}
+
+.recharts-legend-wrapper {
+  padding-top: 10px !important;
+}
+
+.recharts-legend-item-text {
+  color: #555 !important;
+  font-size: 0.9rem !important;
+}

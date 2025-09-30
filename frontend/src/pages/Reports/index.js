@@ -17,6 +17,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { toast } from "react-toastify";
+import MonthlyTrendChart from "../../components/MonthlyTrendChart";
 import "./Reports.css";
 
 const COLORS = [
@@ -204,6 +205,9 @@ const Reports = () => {
           </div>
         </div>
       </div>
+
+      {/* Monthly Trend Charts */}
+      <MonthlyTrendChart />
 
       {/* Charts */}
       <div className="charts-grid">

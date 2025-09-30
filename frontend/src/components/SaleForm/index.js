@@ -18,6 +18,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
       phone: "",
       address: "",
     },
+    region: "Central",
     status: "completed",
     notes: "",
     salesRepresentative: "",
@@ -33,6 +34,7 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
         price: sale.price,
         dateOfSale: new Date(sale.dateOfSale).toISOString().split("T")[0],
         customerInfo: sale.customerInfo,
+        region: sale.region || "Central",
         status: sale.status,
         notes: sale.notes || "",
         salesRepresentative:
@@ -199,6 +201,25 @@ const SaleForm = ({ sale, onClose, onSuccess }) => {
               />
             </div>
 
+            <div className="form-group">
+              <label className="form-label">Region *</label>
+              <select
+                name="region"
+                className="form-select"
+                value={formData.region}
+                onChange={handleChange}
+                required
+              >
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+                <option value="Central">Central</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-row">
             <div className="form-group">
               <label className="form-label">Status</label>
               <select

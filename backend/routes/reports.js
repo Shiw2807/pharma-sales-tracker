@@ -256,6 +256,131 @@ router.get('/performance', authenticate, isManager, async (req, res) => {
   }
 });
 
+// @route   GET /api/reports/monthly-trends
+// @desc    Get monthly trends by drug and region
+// @access  Private (Managers only)
+router.get('/monthly-trends', authenticate, isManager, async (req, res) => {
+  try {
+    const { startDate, endDate, region, productName } = req.query;
+
+    let matchQuery = {};
+    if (startDate || endDate) {
+      matchQuery.dateOfSale = {};
+      if (startDate) matchQuery.dateOfSale.$gte = new Date(startDate);
+      if (endDate) matchQuery.dateOfSale.$lte = new Date(endDate);
+    }
+    if (region) matchQuery.region = region;
+    if (productName) matchQuery.productName = productName;
+
+    // Get monthly trends grouped by drug and region
+    const monthlyTrends = await Sale.aggregate([
+      { $match: matchQuery },
+      {
+        $group: {
+          _id: {
+            month: { $dateToString: { format: '%Y-%m', date: '$dateOfSale' } },
+            productName: '$productName',
+            region: '$region'
+          },
+          totalPrescriptions: { $sum: 1 },
+          totalQuantity: { $sum: '$quantity' },
+          totalRevenue: { $sum: '$totalAmount' },
+          averageOrderValue: { $avg: '$totalAmount' }
+        }
+      },
+      { $sort: { '_id.month': 1, '_id.region': 1, '_id.productName': 1 } }
+    ]);
+
+    // Get unique products and regions for filtering
+    const products = await Sale.distinct('productName', matchQuery);
+    const regions = await Sale.distinct('region', matchQuery);
+
+    // Transform data for chart consumption
+    const chartData = {};
+    const monthsSet = new Set();
+    
+    monthlyTrends.forEach(item => {
+      const { month, productName, region } = item._id;
+      monthsSet.add(month);
+      
+      if (!chartData[productName]) {
+        chartData[productName] = {};
+      }
+      if (!chartData[productName][region]) {
+        chartData[productName][region] = {};
+      }
+      
+      chartData[productName][region][month] = {
+        prescriptions: item.totalPrescriptions,
+        quantity: item.totalQuantity,
+        revenue: item.totalRevenue,
+        avgOrderValue: item.averageOrderValue
+      };
+    });
+
+    // Fill missing months with zero values
+    const months = Array.from(monthsSet).sort();
+    const filledChartData = {};
+    
+    Object.keys(chartData).forEach(product => {
+      filledChartData[product] = {};
+      regions.forEach(region => {
+        filledChartData[product][region] = [];
+        months.forEach(month => {
+          const data = chartData[product]?.[region]?.[month] || {
+            prescriptions: 0,
+            quantity: 0,
+            revenue: 0,
+            avgOrderValue: 0
+          };
+          filledChartData[product][region].push({
+            month,
+            ...data
+          });
+        });
+      });
+    });
+
+    // Calculate summary statistics
+    const summaryStats = await Sale.aggregate([
+      { $match: matchQuery },
+      {
+        $group: {
+          _id: {
+            productName: '$productName',
+            region: '$region'
+          },
+          totalPrescriptions: { $sum: 1 },
+          totalRevenue: { $sum: '$totalAmount' },
+          avgMonthlyPrescriptions: { $avg: '$quantity' }
+        }
+      },
+      { $sort: { totalRevenue: -1 } }
+    ]);
+
+    res.json({
+      success: true,
+      monthlyTrends: {
+        chartData: filledChartData,
+        rawData: monthlyTrends,
+        months,
+        products,
+        regions,
+        summaryStats,
+        filters: {
+          startDate,
+          endDate,
+          region,
+          productName
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching monthly trends:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // @route   GET /api/reports/export
 // @desc    Export sales data as CSV
 // @access  Private (Managers only)
@@ -275,9 +400,9 @@ router.get('/export', authenticate, isManager, async (req, res) => {
       .sort({ dateOfSale: -1 });
 
     // Convert to CSV format
-    const csvHeader = 'Date,Product,Quantity,Price,Total,Customer,Email,Phone,Sales Rep,Status\n';
+    const csvHeader = 'Date,Product,Quantity,Price,Total,Customer,Email,Phone,Region,Sales Rep,Status\n';
     const csvData = sales.map(sale => {
-      return `${sale.dateOfSale.toISOString().split('T')[0]},${sale.productName},${sale.quantity},${sale.price},${sale.totalAmount},"${sale.customerInfo.name}","${sale.customerInfo.email || ''}","${sale.customerInfo.phone || ''}","${sale.salesRepresentative.name}",${sale.status}`;
+      return `${sale.dateOfSale.toISOString().split('T')[0]},${sale.productName},${sale.quantity},${sale.price},${sale.totalAmount},"${sale.customerInfo.name}","${sale.customerInfo.email || ''}","${sale.customerInfo.phone || ''}",${sale.region || 'N/A'},"${sale.salesRepresentative.name}",${sale.status}`;
     }).join('\n');
 
     const csv = csvHeader + csvData;
